@@ -29,3 +29,5 @@ def detect_phones(image_path: str):
 
     return detections.is_empty()
 
+
+detect_phones("pexels-norma-mortenson-4391231.jpg")
