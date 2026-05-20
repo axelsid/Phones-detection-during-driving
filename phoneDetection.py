@@ -1,10 +1,8 @@
 import cv2
 import supervision as sv
-from ultralytics import YOLOWorld
+from ultralytics import YOLO
 
-model = YOLOWorld("yolov8s-world.pt")
-
-model.set_classes(["cell phone"])
+model = YOLO("yolo26m.pt")
 
 box_annotator = sv.BoxAnnotator()
 label_annotator = sv.LabelAnnotator()
@@ -12,7 +10,7 @@ label_annotator = sv.LabelAnnotator()
 def detect_phones(image_path: str):
     image = cv2.imread(image_path)
 
-    results = model.predict(image)[0]
+    results = model.predict(image, classes=[67], conf=0.05)[0]
     detections = sv.Detections.from_ultralytics(results)
 
     labels = [
@@ -27,5 +25,4 @@ def detect_phones(image_path: str):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    return detections.is_empty()
-
+    return not detections.is_empty()
